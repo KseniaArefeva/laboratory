@@ -1,0 +1,143 @@
+### 1. Проверка наличия элемента в массиве
+def contains_item(collection, target):
+    for item in collection:
+        if item == target:
+            return True
+    return False
+
+### 2. Поиск предпоследнего максимального значения
+def find_second_largest(numbers):
+    if len(numbers) < 2:
+        return False
+    largest = second = numbers[0]
+    for num in numbers:
+        if num > largest:
+            second = largest
+            largest = num
+        elif num > second and num != largest:
+            second = num
+    return second
+
+### 3. Двоичный поиск элемента
+def binary_search(data, target):
+    sorted_data = sorted(data)
+    left_bound, right_bound = 0, len(sorted_data) - 1
+    while left_bound <= right_bound:
+        middle = (right_bound + left_bound) // 2
+        if target > sorted_data[middle]:
+            left_bound = middle + 1
+        elif target < sorted_data[middle]:
+            right_bound = middle - 1
+        else:
+            return True
+    return False
+
+### 4. Создание матрицы умножения
+def create_multiplication_matrix(dimension):
+    matrix = []
+    for row_idx in range(1, dimension + 1):
+        current_row = []
+        for col_idx in range(1, dimension + 1):
+            current_row.append(row_idx * col_idx)
+        matrix.append(current_row)
+    return matrix
+
+### 5. Сортировка перемешиванием 
+def bidirectional_bubble_sort(elements):
+    """
+    Шейкерная сортировка (коктейльная сортировка)
+    Проходит по массиву в обоих направлениях для оптимизации
+    """
+    elements = elements.copy()
+    length = len(elements)
+    left_boundary = 0
+    right_boundary = length - 1
+    is_sorted = False
+    
+    while not is_sorted and left_boundary < right_boundary:
+        is_sorted = True
+        
+        # Проход слева направо - перемещаем максимальный элемент в конец
+        for current_pos in range(left_boundary, right_boundary):
+            if elements[current_pos] > elements[current_pos + 1]:
+                elements[current_pos], elements[current_pos + 1] = \
+                elements[current_pos + 1], elements[current_pos]
+                is_sorted = False
+        
+        if is_sorted:
+            break
+            
+        right_boundary -= 1
+        is_sorted = True
+        
+        # Проход справа налево - перемещаем минимальный элемент в начало
+        for current_pos in range(right_boundary - 1, left_boundary - 1, -1):
+            if elements[current_pos] > elements[current_pos + 1]:
+                elements[current_pos], elements[current_pos + 1] = \
+                elements[current_pos + 1], elements[current_pos]
+                is_sorted = False
+        
+        left_boundary += 1
+    
+    return elements
+
+import time
+import random
+
+# Тестирование производительности
+print("=" * 60)
+print("ЛАБОРАТОРНАЯ РАБОТА №1")
+print("Студент: Арефьева Ксения Дмитриевна, ИДБ-25-07")
+print("=" * 60)
+
+test_sizes = [10, 100, 1000, 10000]
+
+print("\n1. Проверка наличия элемента в массиве")
+print("-" * 40)
+for size in test_sizes:
+    test_array = list(range(size))
+    random.shuffle(test_array)
+    start = time.perf_counter()
+    contains_item(test_array, -1)
+    end = time.perf_counter()
+    print(f"Размер {size:5d}: {end - start:.8f} сек")
+
+print("\n2. Поиск предпоследнего максимального значения")
+print("-" * 40)
+for size in test_sizes:
+    test_array = list(range(size))
+    random.shuffle(test_array)
+    start = time.perf_counter()
+    find_second_largest(test_array)
+    end = time.perf_counter()
+    print(f"Размер {size:5d}: {end - start:.8f} сек")
+
+print("\n3. Двоичный поиск элемента")
+print("-" * 40)
+for size in test_sizes:
+    test_array = list(range(size))
+    random.shuffle(test_array)
+    start = time.perf_counter()
+    binary_search(test_array, test_array[0])
+    end = time.perf_counter()
+    print(f"Размер {size:5d}: {end - start:.8f} сек")
+
+matrix_sizes = [10, 50, 100]
+print("\n4. Создание матрицы умножения")
+print("-" * 40)
+for size in matrix_sizes:
+    start = time.perf_counter()
+    create_multiplication_matrix(size)
+    end = time.perf_counter()
+    print(f"Размер {size:5d}: {end - start:.8f} сек")
+
+print("\n5. Сортировка перемешиванием")
+print("-" * 40)
+for size in test_sizes:
+    test_array = list(range(size))
+    random.shuffle(test_array)
+    start = time.perf_counter()
+    bidirectional_bubble_sort(test_array)
+    end = time.perf_counter()
+    print(f"Размер {size:5d}: {end - start:.8f} сек")
+print("   особенно на частично отсортированных данных")
